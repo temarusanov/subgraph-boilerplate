@@ -1,0 +1,34 @@
+{
+    "name": "subgraph-boilderplate",
+    "version": "0.0.0",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/temarusanov/subgraph-boilerplate"
+    },
+    "license": "MIT",
+    "scripts": {
+        "format": "prettier --write \"src/**/*.ts\"",
+        "clean": "rm -rf ./generated/",
+        "generate-manifest:mainnet": "npm run clean && mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+        "generate-constants:mainnet": "npm run clean && mustache config/mainnet.json src/constants/index.ts.template > src/constants/index.ts",
+        "codegen:mainnet": "npm run generate-manifest:mainnet && npm run generate-constants:mainnet && graph codegen",
+        "deploy:mainnet": "npm run codegen:mainnet && graph deploy --product hosted-service username/subgraphname",
+        "create-self-hosted:mainnet": "npm run codegen:mainnet && graph create username/subgraphname --node http://127.0.0.1:8020",
+        "deploy-self-hosted:mainnet": "npm run codegen:mainnet && graph deploy -l ${npm_package_version} --node http://127.0.0.1:8020 username/subgraphname"
+    },
+    "devDependencies": {
+        "@graphprotocol/graph-cli": "0.33.1",
+        "@graphprotocol/graph-ts": "0.27.0",
+        "mustache": "4.2.0",
+        "prettier": "2.3.2",
+        "typescript": "4.8.3",
+        "@semantic-release/changelog": "6.0.1",
+        "@semantic-release/commit-analyzer": "9.0.2",
+        "@semantic-release/git": "10.0.1",
+        "@semantic-release/github": "8.0.5",
+        "@semantic-release/npm": "9.0.1",
+        "@semantic-release/release-notes-generator": "10.0.3",
+        "semantic-release": "19.0.5"
+    }
+}

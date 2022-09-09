@@ -1,0 +1,26 @@
+specVersion: 0.0.3
+description: Your subgraph description
+repository: https://github.com/temarusanov/subgraph-boilerplate
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: USDT
+    network: {{ network }}
+    source:
+      abi: USDT
+      address: "{{ contracts.usdt.address }}"
+      startBlock: {{ contracts.usdt.startblock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/transfer.ts
+      entities:
+        - Transfer
+      abis:
+        - name: USDT
+          file: ./abis/USDT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
